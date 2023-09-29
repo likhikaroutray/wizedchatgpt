@@ -33,7 +33,7 @@ $(document).ready(function () {
     });
    /** end code to append risk CMS collection item descriptin to hidden form field #risk-desc on change of #Risk select field**/
   
-/** start of code to replace {{}} words with user input that matches the field name on form submit**/
+/** start of code to replace {{}} words with user input that matches the field name on form submit
     function updateText() {
       var textToReplace = $("div[data-prompt='prompt']").html();
   
@@ -63,4 +63,33 @@ $(document).ready(function () {
     });
 
     /** start of code to replace {{}} words with user input that matches the field name **/
+
   });
+
+function updateText() {
+  var textToReplace = document.querySelector("div[data-prompt='prompt']").innerHTML;
+
+  textToReplace = textToReplace.replace(/{{(.*?)}}/g, function (match, fieldName) {
+    var inputField = document.querySelector('[name="' + fieldName.trim() + '"]');
+    var value = inputField ? inputField.value : null;
+    
+    if (value !== undefined && value !== null) {
+      return value;
+    } else {
+      return match;
+    }
+  });
+
+  var promptDiv = document.querySelector("div[data-prompt='prompt']");
+  promptDiv.innerHTML = textToReplace;
+  
+  var promptInput = document.getElementById("prompt-input");
+  if (promptInput) {
+    promptInput.value = textToReplace;
+  }
+}
+
+document.getElementById("wf-form-Age").addEventListener("submit", function (event) {
+  event.preventDefault();
+  updateText();
+});
